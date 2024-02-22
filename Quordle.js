@@ -3,9 +3,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('keydown', KeyPressed);
 });
 
+score = 0;
+
 function InitialiseAll(){
     InitialiseGrid();
     InitialiseGame();
+    let keyboard = document.getElementById("KeyBoard");
+    keyboard.remove();
+    document.body.appendChild(keyboard);
+    let letters = keyboard.getElementsByTagName("button");
+    for (let i = 0; i<letters.length; i++){
+        let letter = letters[i].innerText
+        letters[i].setAttribute("id",letter);
+        letters[i].setAttribute("onclick",`VirtualKeyBoardInput("${letter}")`);
+    }
 }
 
 function InitialiseGrid(){
@@ -42,7 +53,8 @@ function InitialiseGame(){
     currentCell = 1
     playing = [true,true,true,true];
 
-    //Pick 4 random words
+    // Pick 4 random words
+    // Random Word Generator: https://random-word-api.vercel.app/
     words = $.ajax({
         url: "https://random-word-api.vercel.app/api?words=4&length=5&type=uppercase",
         type: "GET",
@@ -98,8 +110,29 @@ function Submit() {
         return;
     }
 
+    let guess = "";
+    for (let i = 1; i <= 4; i++) {
+        if (playing[i-1]){
+            for (let j = 1; j <= 5; j++) {
+                cellID = `Game${i}Row${currentGuess}Cell${j}`;
+                cell = document.getElementById(cellID);
+                letter = cell.innerText;
+                guess += letter;
+            }
+            break;
+        }
+    }
+    console.log(guess);
+
+    CheckValidGuess(guess);
+    if (!isValid){
+        ShowInvalidGuess();
+        //alert("Invalid Guess");
+        return;
+    }
     CheckLetters();
     CheckWord();
+    UpdateScore();
     currentGuess++;
     currentCell = 1;
 
@@ -108,6 +141,7 @@ function Submit() {
     }
     else if (currentGuess > 9) {
         alert(`You have run out of guesses \nThe words were ${words["responseJSON"]}`);
+        score = 0;
     }
 }
 
@@ -180,10 +214,79 @@ function CheckWord(){
 
         if (gameWord == guess){
             playing[i-1] = false;
+            score += 1;
         }
     }
 }
 
 function WonGame(){
     alert("You have won the game!");
+}
+
+function CheckValidGuess(guess){
+    $.ajax({
+        url: `https://api.dictionaryapi.dev/api/v2/entries/en/${guess}`,
+        type: "GET",
+        success: function (data) {
+            console.log(data);
+            console.log(data[0]["word"]);
+            isValid = true;
+        },
+        error: function (data) {
+            isValid = false;
+        },
+        async: false
+    });
+}
+
+function Sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function ShowInvalidGuess(){
+    ChangeCellColor("red");
+    await Sleep(500);
+    RemoveCellColor("transparent");
+}
+
+function ChangeCellColor (color){
+    for (let i = 1; i <= 4; i++) {
+        if (playing[i-1]){
+            for (let j = 1; j <= 5; j++) {
+                cellID = `Game${i}Row${currentGuess}Cell${j}`;
+                cell = document.getElementById(cellID);
+                cell.style.backgroundColor = color;
+            }
+        }
+    }
+}
+
+function RemoveCellColor(){
+    for (let i = 1; i <= 4; i++) {
+        if (playing[i-1]){
+            for (let j = 1; j <= 5; j++) {
+                cellID = `Game${i}Row${currentGuess}Cell${j}`;
+                cell = document.getElementById(cellID);
+                
+                cell.removeAttribute("style");
+            }
+        }
+    }
+    
+}
+
+function UpdateScore(){
+    document.getElementById("CurrentScore").innerText = "Current Score: " + score;
+}
+
+function VirtualKeyBoardInput(letter){
+    if (letter == "BackSpace"){
+        BackSpace();
+    }
+    else if (letter == "Enter"){
+        Submit();
+    }
+    else{
+    AddLetter(letter);
+    }
 }

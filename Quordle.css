@@ -1,10 +1,10 @@
 body {
-    background-color: turquoise;
+    background-color: lightgray;
 }
 
 .AllGames {
     display: grid;
-    background-color: greenyellow;
+    /* background-color: greenyellow; */
     padding: 5px;
     margin: 50px;
     grid-template-columns: auto auto;
@@ -42,4 +42,40 @@ body {
 
 .Letter_Not_In_Word{
     background-color: gray;
+}
+
+.KeyBoard {
+    display: grid;
+    grid-template-rows: auto auto auto;
+}
+
+#Row1{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
+    text-align: center;
+}
+
+#Row2{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    text-align: center;
+}
+
+#Row3{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    text-align: center;
+}
+
+.KeyBoard button{
+    margin: 0;
+    border: 1px solid black;
+    background-color: lightblue;
+    border-radius: 0%;
+}
+
+.KeyBoard button:hover{
+    background-color: lightseagreen;
+    border-radius: 30%;
+    transition: 0.15s;
 }
