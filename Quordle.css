@@ -1,0 +1,45 @@
+body {
+    background-color: turquoise;
+}
+
+.AllGames {
+    display: grid;
+    background-color: greenyellow;
+    padding: 5px;
+    margin: 50px;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    row-gap: 40px;
+    column-gap: 40px;
+}
+
+.IndividualGame {
+    display:grid;
+    grid-template-columns: auto;
+}
+
+.IndividualRow {
+    display:grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    background-color:white;
+    text-align: center;
+}
+
+.IndividualCell{
+    margin:0px;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    height: 40px;
+    font-size: 20px;
+}
+
+.Letter_In_Place{
+    background-color: lightgreen;
+}
+
+.Letter_In_Word{
+    background-color: orange;
+}
+
+.Letter_Not_In_Word{
+    background-color: gray;
+}
