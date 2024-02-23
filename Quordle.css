@@ -15,6 +15,7 @@ body {
 .IndividualGame {
     display:grid;
     grid-template-columns: auto;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10%;
 }
 
 .IndividualRow {
@@ -46,6 +47,7 @@ body {
 .KeyBoard {
     display: grid;
     grid-template-rows: auto auto auto;
+    height: 150px;
 }
 
 #Row1{
